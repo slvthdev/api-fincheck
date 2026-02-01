@@ -51,7 +51,14 @@ export default defineConfig([
             'sibling',
             'index',
           ],
-          pathGroupsExcludedImportTypes: ['builtin'],
+          pathGroups: [
+            {
+              pattern: '@nestjs/**',
+              group: 'external',
+              position: 'before',
+            },
+          ],
+          pathGroupsExcludedImportTypes: ['builtin', '@nestjs/**'],
           alphabetize: { order: 'asc', caseInsensitive: true },
           'newlines-between': 'always',
         },
