@@ -5,7 +5,6 @@ import {
   IsString,
   IsUrl,
   NotEquals,
-  ValidateIf,
   validateSync,
 } from 'class-validator';
 
@@ -19,22 +18,15 @@ class Env {
   @IsNotEmpty()
   dbURL: string;
 
-  @ValidateIf((_, value) => value !== '*')
-  @IsString({ each: true })
-  @IsUrl({ require_tld: false, require_protocol: true }, { each: true })
-  @ArrayNotEmpty()
-  @IsNotEmpty()
   @Transform(({ value }) => {
-    if (value === '*') {
-      return value;
-    }
-
     return String(value)
       .split(';')
       .map((origin) => origin.trim())
       .filter(Boolean);
   })
-  allowedOrigins: string | string[];
+  @IsUrl({ require_tld: false, require_protocol: true }, { each: true })
+  @ArrayNotEmpty()
+  allowedOrigins: string[];
 }
 
 export const env: Env = plainToInstance(Env, {
